@@ -1,0 +1,25 @@
+name: Run JMeter Tests
+
+on: [push, pull_request]
+
+jobs:
+  jmeter-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Reponun kopyalanması
+        uses: actions/checkout@v4
+
+      - name: JMeter'i yükle
+        run: |
+          sudo apt update
+          sudo apt install -y jmeter
+
+      - name: JMeter Testlerini Çalıştır
+        run: jmeter -n -t MyTestPlan.jmx -l test-results.jtl
+
+      - name: Test Sonuçlarını Yükle
+        uses: actions/upload-artifact@v4
+        with:
+          name: jmeter-test-results
+          path: test-results.jtl
